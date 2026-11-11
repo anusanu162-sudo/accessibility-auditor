@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "a11y-auditor"
+version = "1.0.0"
+description = "Scan a web page for WCAG accessibility problems and export a report"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Anu" }]
+keywords = ["accessibility", "a11y", "wcag", "axe-core", "audit"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+  "playwright>=1.45",
+  "streamlit>=1.30",
+]
+
+[project.urls]
+Homepage = "https://github.com/anusanu162-sudo/accessibility-auditor"
+
+[project.scripts]
+a11y-auditor = "a11y_auditor.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["a11y_auditor*"]
+
+[tool.setuptools.package-data]
+a11y_auditor = ["vendor/axe.min.js"]

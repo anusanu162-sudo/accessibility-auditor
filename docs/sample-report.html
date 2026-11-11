@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Accessibility report &mdash; Bed &amp; Breakfast - demo page with accessibility problems</title>
+<style>
+  :root { color-scheme: light; }
+  body { font-family: "Segoe UI", Calibri, Arial, sans-serif; color: #1f2430;
+         max-width: 900px; margin: 32px auto; padding: 0 18px; line-height: 1.55; }
+  h1 { font-size: 24px; margin-bottom: 4px; }
+  h2 { font-size: 17px; margin-top: 28px; border-bottom: 1px solid #dde4ee; padding-bottom: 6px; }
+  h3 { font-size: 14px; margin: 18px 0 6px; }
+  .url { color: #5b6475; font-size: 13px; word-break: break-all; }
+  .summary { display: flex; gap: 14px; margin: 18px 0 8px; flex-wrap: wrap; }
+  .card { border: 1px solid #dde4ee; border-radius: 8px; padding: 12px 16px; min-width: 120px; }
+  .card .n { font-size: 24px; font-weight: 700; display: block; }
+  .card .l { font-size: 11px; text-transform: uppercase; letter-spacing: .6pt; color: #6b7484; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 8px 0 0; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e6ebf2; }
+  th { background: #f3f6fa; }
+  .pill { display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: .6pt;
+           padding: 2px 7px; border-radius: 10px; color: #fff; vertical-align: middle; }
+  .pill.critical { background: #8e1b1b; }
+  .pill.serious  { background: #c0392b; }
+  .pill.moderate { background: #c77800; }
+  .pill.minor    { background: #5b6475; }
+  .rule { border: 1px solid #e6ebf2; border-radius: 8px; padding: 10px 16px; margin: 12px 0;
+           page-break-inside: avoid; }
+  .rule-id { font-family: Consolas, monospace; font-size: 13px; }
+  .meta, .note { font-size: 12px; color: #5b6475; }
+  code.sel { font-family: Consolas, monospace; font-size: 12px; background: #f1f3f7;
+              padding: 1px 5px; border-radius: 3px; }
+  pre { background: #f7f9fc; border: 1px solid #e6ebf2; border-radius: 5px; padding: 7px 9px;
+         font-size: 11px; white-space: pre-wrap; word-break: break-all; margin: 5px 0; }
+  ul.elements { font-size: 13px; }
+  ul.elements li { margin-bottom: 10px; }
+  .empty { padding: 10px 0; }
+  footer { margin-top: 30px; font-size: 12px; color: #6b7484; border-top: 1px solid #dde4ee;
+            padding-top: 10px; }
+  @media print { body { margin: 0; max-width: none; } }
+</style>
+</head>
+<body>
+  <h1>Accessibility report</h1>
+  <p class="url">http://127.0.0.1:8123/bad-page.html</p>
+  <p class="url">Bed &amp; Breakfast - demo page with accessibility problems &middot; scanned 2026-11-11 14:51 UTC</p>
+
+  <div class="summary">
+    <div class="card"><span class="n" style="color:#c0392b">47</span>
+      <span class="l">Score / 100</span></div>
+    <div class="card"><span class="n" style="color:#c0392b">F</span>
+      <span class="l">Grade</span></div>
+    <div class="card"><span class="n">9</span>
+      <span class="l">Rules failed</span></div>
+    <div class="card"><span class="n">18</span>
+      <span class="l">Elements affected</span></div>
+    <div class="card"><span class="n">19</span>
+      <span class="l">Rules passed</span></div>
+  </div>
+  <p>Failing - serious barriers across the page.</p>
+
+  <h2>Issues by severity</h2>
+  <table>
+    <tr><th>Severity</th><th>Failed rules</th></tr>
+    <tr><td><span class="pill critical">Critical</span></td><td>2</td></tr><tr><td><span class="pill serious">Serious</span></td><td>3</td></tr><tr><td><span class="pill moderate">Moderate</span></td><td>4</td></tr><tr><td><span class="pill minor">Minor</span></td><td>0</td></tr>
+  </table>
+
+  <h2>Violations</h2>
+  
+        <section class="rule">
+          <h3>
+            <span class="pill critical">Critical</span>
+            <span class="rule-id">1. button-name</span> &mdash; Buttons must have discernible text
+          </h3>
+          <p>Ensure buttons have discernible text</p>
+          <p class="meta">
+            1 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/button-name?application=axeAPI">rule documentation</a>
+            &middot; tags: wcag2a, wcag412
+          </p>
+          <ul class="elements"><li><code class="sel">button</code><pre>&lt;button&gt;&lt;/button&gt;</pre></li></ul>
+        </section>
+        <section class="rule">
+          <h3>
+            <span class="pill critical">Critical</span>
+            <span class="rule-id">2. image-alt</span> &mdash; Images must have alternative text
+          </h3>
+          <p>Ensure &lt;img&gt; elements have alternative text or a role of none or presentation</p>
+          <p class="meta">
+            1 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/image-alt?application=axeAPI">rule documentation</a>
+            &middot; tags: wcag2a, wcag111
+          </p>
+          <ul class="elements"><li><code class="sel">img</code><pre>&lt;img src=&quot;building.png&quot; width=&quot;200&quot; height=&quot;120&quot;&gt;</pre></li></ul>
+        </section>
+        <section class="rule">
+          <h3>
+            <span class="pill serious">Serious</span>
+            <span class="rule-id">3. color-contrast</span> &mdash; Elements must meet minimum color contrast ratio thresholds
+          </h3>
+          <p>Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds</p>
+          <p class="meta">
+            1 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=axeAPI">rule documentation</a>
+            &middot; tags: wcag2aa, wcag143
+          </p>
+          <ul class="elements"><li><code class="sel">.faint</code><pre>&lt;p class=&quot;faint&quot;&gt;Our cheapest room is available this weekend. Call us.&lt;/p&gt;</pre></li></ul>
+        </section>
+        <section class="rule">
+          <h3>
+            <span class="pill serious">Serious</span>
+            <span class="rule-id">4. html-has-lang</span> &mdash; &lt;html&gt; element must have a lang attribute
+          </h3>
+          <p>Ensure every HTML document has a lang attribute</p>
+          <p class="meta">
+            1 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/html-has-lang?application=axeAPI">rule documentation</a>
+            &middot; tags: wcag2a, wcag311
+          </p>
+          <ul class="elements"><li><code class="sel">html</code><pre>&lt;html&gt;</pre></li></ul>
+        </section>
+        <section class="rule">
+          <h3>
+            <span class="pill serious">Serious</span>
+            <span class="rule-id">5. link-name</span> &mdash; Links must have discernible text
+          </h3>
+          <p>Ensure links have discernible text</p>
+          <p class="meta">
+            1 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/link-name?application=axeAPI">rule documentation</a>
+            &middot; tags: wcag2a, wcag244, wcag412
+          </p>
+          <ul class="elements"><li><code class="sel">a</code><pre>&lt;a href=&quot;/rooms&quot;&gt;&lt;/a&gt;</pre></li></ul>
+        </section>
+        <section class="rule">
+          <h3>
+            <span class="pill moderate">Moderate</span>
+            <span class="rule-id">6. region</span> &mdash; All page content should be contained by landmarks
+          </h3>
+          <p>Ensure all page content is contained by landmarks</p>
+          <p class="meta">
+            10 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/region?application=axeAPI">rule documentation</a>
+            &middot; tags: best-practice
+          </p>
+          <ul class="elements"><li><code class="sel">img</code><pre>&lt;img src=&quot;building.png&quot; width=&quot;200&quot; height=&quot;120&quot;&gt;</pre></li><li><code class="sel">h1</code><pre>&lt;h1&gt;Sunrise Guest House&lt;/h1&gt;</pre></li><li><code class="sel">h4</code><pre>&lt;h4&gt;Rooms and rates&lt;/h4&gt;</pre></li><li><code class="sel">.faint</code><pre>&lt;p class=&quot;faint&quot;&gt;Our cheapest room is available this weekend. Call us.&lt;/p&gt;</pre></li><li><code class="sel">p:nth-child(5)</code><pre>&lt;p&gt;Read more: &lt;a href=&quot;/rooms&quot;&gt;&lt;/a&gt;&lt;/p&gt;</pre></li><li><code class="sel">input[type=&quot;text&quot;]</code><pre>&lt;input type=&quot;text&quot; name=&quot;email&quot; placeholder=&quot;Email&quot;&gt;</pre></li><li><code class="sel">table</code><pre>&lt;table&gt; &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Room&lt;/td&gt;&lt;td&gt;Price&lt;/td&gt;&lt;/tr&gt; &lt;tr&gt;&lt;td&gt;Single&lt;/td&gt;&lt;td&gt;1200&lt;/td&gt;&lt;/tr&gt; &lt;tr&gt;&lt;td&gt;Double&lt;/td&gt;&lt;td&gt;1800&lt;/td&gt;&lt;/tr&gt; &lt;/tbody&gt;&lt;/table&gt;</pre></li><li><code class="sel">div:nth-child(8)</code><pre>&lt;div id=&quot;notice&quot;&gt;Breakfast is included.&lt;/div&gt;</pre></li><li><code class="sel">div:nth-child(9)</code><pre>&lt;div id=&quot;notice&quot;&gt;Checkout is at 10am.&lt;/div&gt;</pre></li><li><code class="sel">.tiny</code><pre>&lt;p class=&quot;tiny&quot;&gt;Terms and conditions apply. Prices may change without notice.&lt;/p&gt;</pre></li></ul>
+        </section>
+        <section class="rule">
+          <h3>
+            <span class="pill moderate">Moderate</span>
+            <span class="rule-id">7. heading-order</span> &mdash; Heading levels should only increase by one
+          </h3>
+          <p>Ensure the order of headings is semantically correct</p>
+          <p class="meta">
+            1 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/heading-order?application=axeAPI">rule documentation</a>
+            &middot; tags: best-practice
+          </p>
+          <ul class="elements"><li><code class="sel">h4</code><pre>&lt;h4&gt;Rooms and rates&lt;/h4&gt;</pre></li></ul>
+        </section>
+        <section class="rule">
+          <h3>
+            <span class="pill moderate">Moderate</span>
+            <span class="rule-id">8. landmark-one-main</span> &mdash; Document should have one main landmark
+          </h3>
+          <p>Ensure the document has a main landmark</p>
+          <p class="meta">
+            1 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/landmark-one-main?application=axeAPI">rule documentation</a>
+            &middot; tags: best-practice
+          </p>
+          <ul class="elements"><li><code class="sel">html</code><pre>&lt;html&gt;</pre></li></ul>
+        </section>
+        <section class="rule">
+          <h3>
+            <span class="pill moderate">Moderate</span>
+            <span class="rule-id">9. meta-viewport</span> &mdash; Zooming and scaling must not be disabled
+          </h3>
+          <p>Ensure &lt;meta name=&quot;viewport&quot;&gt; does not disable text scaling and zooming</p>
+          <p class="meta">
+            1 affected element(s) &middot;
+            <a href="https://dequeuniversity.com/rules/axe/4.14/meta-viewport?application=axeAPI">rule documentation</a>
+            &middot; tags: wcag2aa, wcag144
+          </p>
+          <ul class="elements"><li><code class="sel">meta[name=&quot;viewport&quot;]</code><pre>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, user-scalable=no&quot;&gt;</pre></li></ul>
+        </section>
+
+  <footer>
+    Generated by accessibility-auditor using axe-core 4.14.0.
+    Automated checks catch only part of real accessibility problems &mdash;
+    always test with a keyboard and a screen reader.
+  </footer>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# Runtime
+playwright>=1.45
+streamlit>=1.30
+
+# Tests
+pytest>=8

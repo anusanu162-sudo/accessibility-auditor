@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- Deliberately broken page used to demo and test the auditor.
+     Every problem here is intentional. Do not copy this markup. -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Bed &amp; Breakfast - demo page with accessibility problems</title>
+  <style>
+    body { font-family: Georgia, serif; margin: 40px; }
+    .faint { color: #b9b9b9; background: #ffffff; }
+    .tiny { font-size: 10px; }
+    table { border-collapse: collapse; }
+    td, th { border: 1px solid #ccc; padding: 4px 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Image with no alt text -->
+  <img src="building.png" width="200" height="120">
+
+  <!-- 2. Heading order jumps from h1 to h4 -->
+  <h1>Sunrise Guest House</h1>
+  <h4>Rooms and rates</h4>
+
+  <!-- 3. Text with almost no contrast -->
+  <p class="faint">Our cheapest room is available this weekend. Call us.</p>
+
+  <!-- 4. Link with no accessible name -->
+  <p>Read more: <a href="/rooms"></a></p>
+
+  <!-- 5. Form input with no label -->
+  <form>
+    <input type="text" name="email" placeholder="Email">
+    <button></button>
+    <input type="submit" value="Book now">
+  </form>
+
+  <!-- 6. Data table with no header row -->
+  <table>
+    <tr><td>Room</td><td>Price</td></tr>
+    <tr><td>Single</td><td>1200</td></tr>
+    <tr><td>Double</td><td>1800</td></tr>
+  </table>
+
+  <!-- 7. Duplicate id -->
+  <div id="notice">Breakfast is included.</div>
+  <div id="notice">Checkout is at 10am.</div>
+
+  <!-- 8. Tiny text -->
+  <p class="tiny">Terms and conditions apply. Prices may change without notice.</p>
+
+  <!-- 9. Fake button made from a div, not reachable by keyboard -->
+  <div onclick="alert('Booked')" style="background:#eee;padding:10px;display:inline-block">
+    Click here to book
+  </div>
+
+</body>
+</html>
