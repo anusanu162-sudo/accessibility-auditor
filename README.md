@@ -1,5 +1,7 @@
 # Accessibility Auditor
 
+[![CI](https://github.com/anusanu162-sudo/accessibility-auditor/actions/workflows/ci.yml/badge.svg)](https://github.com/anusanu162-sudo/accessibility-auditor/actions/workflows/ci.yml)
+
 A command-line tool and web app that scans a page for accessibility problems (WCAG),
 scores it out of 100, and exports a report you can hand to a developer.
 
