@@ -73,6 +73,11 @@ small page with deliberate accessibility mistakes. Open it in a browser; use
 **Print → Save as PDF** if you want a PDF. The Markdown version is
 [docs/sample-report.md](docs/sample-report.md).
 
+**Full project report:** [docs/Accessibility-Auditor-Report.pdf](docs/Accessibility-Auditor-Report.pdf)
+(23 pages) — what the tool does, how the scanner and scoring work, test evidence, honest
+limitations, and the complete algorithm explained in plain English. The HTML source is
+[docs/Accessibility-Auditor-Report.html](docs/Accessibility-Auditor-Report.html).
+
 ## Use it from the command line
 
 ```bash

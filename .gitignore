@@ -11,6 +11,7 @@ env/
 # Generated reports
 reports/
 *.pdf
+!docs/Accessibility-Auditor-Report.pdf
 
 # OS / editor
 .DS_Store

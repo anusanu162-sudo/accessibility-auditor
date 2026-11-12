@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Accessibility Auditor &mdash; Project Report</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Calibri, Arial, sans-serif;
+    font-size: 10.2pt;
+    line-height: 1.45;
+    color: #1f2430;
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  h1, h2, h3, h4 { font-family: "Segoe UI Semibold", "Segoe UI", Calibri, sans-serif; }
+  p { margin: 0 0 7pt 0; }
+  ul, ol { margin: 0 0 8pt 0; padding-left: 18pt; }
+  li { margin-bottom: 3pt; }
+  table { width: 100%; border-collapse: collapse; margin: 7pt 0 10pt 0; font-size: 9.4pt; }
+  tr { page-break-inside: avoid; }
+  th { background: #eef4f8; text-align: left; padding: 5.5pt 7pt; border-bottom: 1.5pt solid #c3d6e2; font-weight: 600; }
+  td { padding: 4.8pt 7pt; border-bottom: 0.6pt solid #dde4ee; vertical-align: top; }
+  tr:nth-child(even) td { background: #fafbfd; }
+  code { font-family: Consolas, "Courier New", monospace; font-size: 9pt; background: #f1f3f7; padding: 1pt 4pt; border-radius: 3pt; }
+
+  /* ---------- cover ---------- */
+  .cover { page-break-after: always; padding-top: 28mm; }
+  .cover-band {
+    background: linear-gradient(135deg, #0891b2 0%, #1e3a8a 100%);
+    color: #fff; border-radius: 10pt; padding: 26pt 24pt; margin-bottom: 22pt;
+  }
+  .cover-band .kicker { font-size: 9.5pt; letter-spacing: 2pt; text-transform: uppercase; opacity: .9; margin-bottom: 10pt; }
+  .cover-band h1 { font-size: 31pt; margin: 0 0 8pt 0; line-height: 1.12; }
+  .cover-band .sub { font-size: 12.5pt; opacity: .95; margin: 0; }
+  .cover-meta { font-size: 10pt; color: #3d4658; }
+  .cover-meta table { font-size: 10pt; }
+  .cover-meta th { width: 34%; background: #f5f7fb; }
+  .cover-foot { margin-top: 26pt; font-size: 9pt; color: #6b7484; border-top: 0.6pt solid #dde4ee; padding-top: 8pt; }
+  .badge { display: inline-block; background: #eef2f8; color: #3d4658; border-radius: 20pt; padding: 3pt 9pt; font-size: 9pt; margin: 0 4pt 4pt 0; }
+
+  /* ---------- sections ---------- */
+  h2 {
+    font-size: 15.5pt; color: #fff; background: #1e3a8a;
+    padding: 6pt 10pt; border-radius: 5pt; margin: 0 0 10pt 0;
+    page-break-after: avoid;
+  }
+  h3 { font-size: 12pt; color: #0e7490; margin: 11pt 0 5pt 0; page-break-after: avoid; }
+  h4 { font-size: 10.8pt; color: #1e3a8a; margin: 10pt 0 4pt 0; page-break-after: avoid; }
+  .section { page-break-before: auto; padding-top: 14pt; }
+  .section.newpage { page-break-before: always; padding-top: 0; }
+  .section.first { page-break-before: avoid; }
+
+  /* callouts */
+  .simple {
+    background: #f4f9f4; border-left: 4pt solid #27ae60;
+    padding: 7pt 10pt; margin: 8pt 0 10pt 0; border-radius: 3pt; page-break-inside: avoid;
+  }
+  .simple .label { display: block; font-size: 8.6pt; letter-spacing: 1.1pt; text-transform: uppercase; color: #1e8449; font-weight: 700; margin-bottom: 3pt; }
+  .warn {
+    background: #fdf6ec; border-left: 4pt solid #e67e22;
+    padding: 7pt 10pt; margin: 8pt 0 10pt 0; border-radius: 3pt; page-break-inside: avoid;
+  }
+  .warn .label { display: block; font-size: 8.6pt; letter-spacing: 1.1pt; text-transform: uppercase; color: #b9660f; font-weight: 700; margin-bottom: 3pt; }
+  .note {
+    background: #f2f6fd; border-left: 4pt solid #2980b9;
+    padding: 7pt 10pt; margin: 8pt 0 10pt 0; border-radius: 3pt; page-break-inside: avoid;
+  }
+  .note .label { display: block; font-size: 8.6pt; letter-spacing: 1.1pt; text-transform: uppercase; color: #1f6391; font-weight: 700; margin-bottom: 3pt; }
+
+  /* toc */
+  .toc { font-size: 10.5pt; }
+  .toc ol { padding-left: 20pt; }
+  .toc li { margin-bottom: 5.5pt; }
+  .toc .num { color: #0e7490; font-weight: 600; }
+
+  /* flow diagram */
+  .flow { margin: 10pt 0 14pt 0; page-break-inside: avoid; }
+  .flow .box {
+    border: 1.2pt solid #c3d6e2; background: #fbfcfe; border-radius: 5pt;
+    padding: 6pt 10pt; font-size: 9.6pt;
+  }
+  .flow .box b { color: #1e3a8a; }
+  .flow .box .t { color: #6b7484; font-size: 8.8pt; }
+  .flow .arrow { text-align: center; color: #a3aebf; font-size: 12pt; line-height: 1.1; }
+
+  /* stat row */
+  .stats { display: flex; gap: 8pt; margin: 10pt 0 14pt 0; page-break-inside: avoid; }
+  .stat { flex: 1; border: 0.8pt solid #dde4ee; border-radius: 5pt; padding: 7pt 9pt; text-align: center; }
+  .stat .n { font-size: 16pt; font-weight: 700; color: #0e7490; display: block; line-height: 1.2; }
+  .stat .l { font-size: 8.4pt; color: #6b7484; text-transform: uppercase; letter-spacing: .6pt; }
+
+  .tick { color: #27ae60; font-weight: 700; }
+  .cross { color: #c0392b; font-weight: 700; }
+  .small { font-size: 9pt; color: #6b7484; }
+  .keep { page-break-inside: avoid; }
+  .stripe { height: 3pt; background: linear-gradient(90deg, #0891b2, #1e3a8a); border-radius: 2pt; margin: 0 0 14pt 0; }
+  .scorebox { border: 1pt solid #dde4ee; border-radius: 6pt; padding: 10pt 12pt; margin: 10pt 0 14pt 0; page-break-inside: avoid; }
+  .scorebox .big { font-size: 28pt; font-weight: 700; color: #c0392b; line-height: 1; }
+  .scorebox .lbl { font-size: 9pt; color: #6b7484; text-transform: uppercase; letter-spacing: .6pt; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="cover-band">
+    <div class="kicker">Project Report</div>
+    <h1>Accessibility Auditor</h1>
+    <p class="sub">A tool that scans a web page for accessibility problems, gives it a score out of 100, and explains what to fix.</p>
+  </div>
+
+  <div class="cover-meta">
+    <table>
+      <tr><th>Project</th><td>Accessibility Auditor (WCAG checker)</td></tr>
+      <tr><th>Type</th><td>Web quality / testing tool &mdash; browser automation and reporting</td></tr>
+      <tr><th>Built by</th><td>Anu</td></tr>
+      <tr><th>Main tools</th><td>Python, Playwright, axe-core 4.14.0, Streamlit</td></tr>
+      <tr><th>Interfaces</th><td>Command line tool and a local web app</td></tr>
+      <tr><th>Outputs</th><td>Markdown, printable HTML, JSON</td></tr>
+      <tr><th>Automated tests</th><td>29 &mdash; passing, with continuous integration</td></tr>
+      <tr><th>Source code</th><td>github.com/anusanu162-sudo/accessibility-auditor</td></tr>
+      <tr><th>Date</th><td>November 2026</td></tr>
+    </table>
+  </div>
+
+  <div style="margin-top:14pt">
+    <span class="badge">Python</span>
+    <span class="badge">Playwright</span>
+    <span class="badge">axe-core</span>
+    <span class="badge">Streamlit</span>
+    <span class="badge">pytest</span>
+    <span class="badge">GitHub Actions</span>
+    <span class="badge">MIT licensed</span>
+  </div>
+
+  <div class="cover-foot">
+    This report explains what the project does, how it works, how it was tested, what it cannot do,
+    and the complete algorithm in plain English.<br>
+    Every claim in this document can be checked against the public repository.
+  </div>
+</div>
+
+<!-- ============ CONTENTS ============ -->
+<div class="section newpage">
+  <h2>Contents</h2>
+  <div class="toc">
+    <ol>
+      <li><span class="num">1.</span> Project at a Glance</li>
+      <li><span class="num">2.</span> What This Project Does</li>
+      <li><span class="num">3.</span> Why It Matters</li>
+      <li><span class="num">4.</span> What Accessibility Means in Practice</li>
+      <li><span class="num">5.</span> How the Scanner Works</li>
+      <li><span class="num">6.</span> The Checks It Runs</li>
+      <li><span class="num">7.</span> The 0&ndash;100 Score</li>
+      <li><span class="num">8.</span> The Reports</li>
+      <li><span class="num">9.</span> Real Scans and What They Show</li>
+      <li><span class="num">10.</span> Inside the Project Folder</li>
+      <li><span class="num">11.</span> How to Run It</li>
+      <li><span class="num">12.</span> Engineering Quality: Tests and CI</li>
+      <li><span class="num">13.</span> Strengths of the Project</li>
+      <li><span class="num">14.</span> Limitations (Honest List)</li>
+      <li><span class="num">15.</span> Future Improvements</li>
+      <li><span class="num">16.</span> Glossary in Simple English</li>
+      <li><span class="num">17.</span> The Complete Algorithm &mdash; Explained for HR</li>
+    </ol>
+  </div>
+
+  <div class="note">
+    <span class="label">How to read this report</span>
+    Sections 1 to 15 explain the project for a technical reader. Section 16 explains every term
+    in plain language. Section 17 is written for a non-technical reader, such as an HR interviewer,
+    and contains the complete algorithm from beginning to end.
+  </div>
+
+  <div class="stripe"></div>
+  <p class="small">
+    The short version: this is a working command-line tool and web app that opens a page in a real
+    browser, runs an industry-standard accessibility engine against it, converts the findings into
+    a score and a readable report, and ships with tests, continuous integration and documented limits.
+  </p>
+</div>
+
+<!-- ============ 1 ============ -->
+<div class="section newpage">
+  <h2>1. Project at a Glance</h2>
+
+  <p>
+    The Accessibility Auditor checks a web page for common accessibility mistakes: images without
+    alternative text, text that is too faint to read, form fields with no label, buttons with no
+    name, broken heading order, and misuse of ARIA attributes. It reports each problem with the
+    exact element that caused it, gives the page a score out of 100, and exports the result in three
+    formats.
+  </p>
+
+  <div class="stats">
+    <div class="stat"><span class="n">100</span><span class="l">Point score</span></div>
+    <div class="stat"><span class="n">3</span><span class="l">Report formats</span></div>
+    <div class="stat"><span class="n">29</span><span class="l">Automated tests</span></div>
+    <div class="stat"><span class="n">2</span><span class="l">Interfaces (CLI + web)</span></div>
+  </div>
+
+  <table>
+    <tr><th style="width:24%">Question</th><th>Answer</th></tr>
+    <tr><td>What problem does it solve?</td><td>Accessibility problems are invisible to the person who built the page, but they block real users. Finding them by hand is slow.</td></tr>
+    <tr><td>Who is it for?</td><td>Developers, students, QA testers, and anyone who wants a quick accessibility check before publishing a page.</td></tr>
+    <tr><td>What goes in?</td><td>One public URL, for example <code>https://example.com</code>.</td></tr>
+    <tr><td>What comes out?</td><td>A score, a letter grade, a severity breakdown, and a list of failed rules with affected elements.</td></tr>
+    <tr><td>How is the page checked?</td><td>A real Chrome browser loads the page, then axe-core, an open-source accessibility engine, inspects the rendered result.</td></tr>
+    <tr><td>How long does a scan take?</td><td>Usually 3&ndash;8 seconds, depending on the page and network.</td></tr>
+    <tr><td>Is it deployed?</td><td>No. It runs locally. The code, tests and CI are public on GitHub.</td></tr>
+    <tr><td>What is the honest status?</td><td>A solid working tool and learning project, not a certification product. It finds a useful share of problems, not all of them.</td></tr>
+  </table>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    You give it a web address. It looks at the page the way a browser sees it, lists the accessibility
+    mistakes it can detect, scores the page, and writes a report you can send to a developer.
+  </div>
+</div>
+
+<!-- ============ 2 ============ -->
+<div class="section">
+  <h2>2. What This Project Does</h2>
+
+  <h3>2.1 For the user</h3>
+  <ol>
+    <li>The user enters a URL in the command line or the web app.</li>
+    <li>The tool opens that page in a real browser, exactly as a visitor would see it.</li>
+    <li>It runs dozens of accessibility rules against the rendered page.</li>
+    <li>It groups the failures by severity and calculates a score out of 100.</li>
+    <li>It shows each failed rule with the CSS selector and HTML of every affected element.</li>
+    <li>The user downloads the result as Markdown, printable HTML or JSON.</li>
+  </ol>
+
+  <h3>2.2 Features built into the tool</h3>
+  <table>
+    <tr><th style="width:34%">Feature</th><th>What it gives the user</th></tr>
+    <tr><td>Command-line interface</td><td>One command, reports written to a folder. Easy to put in a script or CI pipeline.</td></tr>
+    <tr><td>Streamlit web app</td><td>Type a URL, press a button, see the score and expand each issue in the browser.</td></tr>
+    <tr><td>Severity filter</td><td>Hide minor issues and focus on critical and serious barriers first.</td></tr>
+    <tr><td>Element-level detail</td><td>Shows the CSS selector and a short HTML snippet, so the fix is easy to locate.</td></tr>
+    <tr><td>Three export formats</td><td>Markdown for GitHub, printable HTML for sharing, JSON for other tools.</td></tr>
+    <tr><td><code>--fail-under</code> gate</td><td>Exit with code 1 when the score is too low, so a build can be blocked automatically.</td></tr>
+    <tr><td>Bot-protection guard</td><td>Detects CAPTCHA and &ldquo;Just a moment&rdquo; pages and refuses to score them instead of producing a meaningless result.</td></tr>
+    <tr><td>Vendored engine</td><td>axe-core is stored inside the project, so scans do not depend on a third-party CDN at run time.</td></tr>
+    <tr><td>Offline tests</td><td>The test suite needs no network and no browser, so it runs anywhere in seconds.</td></tr>
+  </table>
+
+  <h3>2.3 Behind the scenes, in one paragraph</h3>
+  <p>
+    The scanner uses Playwright to start a headless Chrome browser and open the URL. After the page
+    settles, it injects the axe-core JavaScript file into the page and asks it to inspect the whole
+    document. axe-core returns a structured list of failed rules. The Python code reduces that large
+    response to the fields it needs, converts it into simple data objects, calculates the score,
+    and passes the result to three report writers. Finally the browser is closed and the files are
+    saved. Nothing is uploaded anywhere.
+  </p>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    It is a browser robot that opens a page, runs an accessibility checklist on it, and writes down
+    what is wrong and where.
+  </div>
+</div>
+
+<!-- ============ 3 ============ -->
+<div class="section">
+  <h2>3. Why It Matters</h2>
+
+  <p>
+    The web is how people apply for jobs, pay bills, study, book appointments and reach government
+    services. When a page is built without accessibility in mind, some people are simply locked out
+    &mdash; not because they lack the ability, but because the page was not built for them.
+  </p>
+
+  <p>
+    The World Health Organization estimates that about <b>1.3 billion people</b>, roughly 16% of the
+    world, live with significant disability. Add temporary conditions such as a broken wrist or a
+    bright screen in sunlight, and the number of people who benefit from accessible design is far
+    larger.
+  </p>
+
+  <h3>3.1 Common barriers and who they affect</h3>
+  <table>
+    <tr><th style="width:32%">Barrier</th><th>Who is blocked</th></tr>
+    <tr><td>Image with no alt text</td><td>A blind user hears &ldquo;image&rdquo; instead of the information the image carries.</td></tr>
+    <tr><td>Text with low contrast</td><td>People with low vision, colour blindness, or anyone using a phone in sunlight.</td></tr>
+    <tr><td>Form field with no label</td><td>A screen reader cannot say what the field is for, so the user has to guess.</td></tr>
+    <tr><td>Button with no name</td><td>The control is announced as just &ldquo;button&rdquo;. The user cannot tell what it does.</td></tr>
+    <tr><td>Heading levels out of order</td><td>Screen reader users navigating by headings lose the structure of the page.</td></tr>
+    <tr><td>Content unreachable by keyboard</td><td>People who cannot use a mouse cannot operate the page at all.</td></tr>
+    <tr><td>Zoom disabled</td><td>People who need larger text are prevented from enlarging it.</td></tr>
+  </table>
+
+  <h3>3.2 The legal side</h3>
+  <ul>
+    <li><b>WCAG 2.2</b> is the current Web Content Accessibility Guidelines recommendation from the W3C, published in 2023.</li>
+    <li><b>India:</b> the Rights of Persons with Disabilities Act, 2016 requires accessible public digital services.</li>
+    <li><b>European Union:</b> the European Accessibility Act applies to many digital products and services from June 2025.</li>
+    <li><b>United States:</b> the Americans with Disabilities Act has been applied to websites in many court cases.</li>
+  </ul>
+  <p class="small">
+    Laws differ by country and by sector. This project does not give legal advice, and a good score is
+    not a statement of legal compliance.
+  </p>
+
+  <div class="warn">
+    <span class="label">The honest problem</span>
+    Automated tools find only part of the problem. They are excellent at catching mechanical mistakes
+    such as missing alt text, but they cannot judge whether the alt text makes sense, whether the
+    reading order is logical, or whether a screen reader announces the page clearly. This project is
+    a first filter, not a replacement for human testing.
+  </div>
+</div>
+
+<!-- ============ 4 ============ -->
+<div class="section">
+  <h2>4. What Accessibility Means in Practice</h2>
+
+  <p>
+    WCAG organises accessibility into four principles, often remembered as <b>POUR</b>. They are a
+    useful way to understand why the rules in this project exist.
+  </p>
+
+  <table>
+    <tr><th style="width:18%">Principle</th><th style="width:34%">Plain meaning</th><th>Example problem this tool catches</th></tr>
+    <tr><td><b>Perceivable</b></td><td>The user must be able to sense the content.</td><td>An image with no text alternative; grey text on white with a contrast ratio below the minimum.</td></tr>
+    <tr><td><b>Operable</b></td><td>The user must be able to use the controls.</td><td>A clickable <code>&lt;div&gt;</code> that cannot be reached with the keyboard; zoom disabled in the viewport tag.</td></tr>
+    <tr><td><b>Understandable</b></td><td>The page must behave predictably and be readable.</td><td>A missing page language; headings that jump from level 1 to level 4.</td></tr>
+    <tr><td><b>Robust</b></td><td>The page must work with different browsers and assistive technology.</td><td>Invalid ARIA roles; ARIA roles placed inside the wrong parent element.</td></tr>
+  </table>
+
+  <h3>4.1 WCAG conformance levels are not the same as impact levels</h3>
+  <p>
+    WCAG defines three conformance levels: <b>A</b> (minimum), <b>AA</b> (the usual legal target) and
+    <b>AAA</b> (enhanced). The tool does not claim a conformance level. Instead, each failed rule is
+    labelled with axe-core&rsquo;s own urgency rating:
+  </p>
+
+  <table>
+    <tr><th style="width:18%">Impact</th><th>What it means here</th></tr>
+    <tr><td><b>Critical</b></td><td>A barrier that can stop some users completely, such as a control with no name.</td></tr>
+    <tr><td><b>Serious</b></td><td>A significant barrier that makes the page hard or confusing to use.</td></tr>
+    <tr><td><b>Moderate</b></td><td>A real problem that adds friction but usually leaves a workaround.</td></tr>
+    <tr><td><b>Minor</b></td><td>A small issue, often about polish or best practice.</td></tr>
+  </table>
+
+  <div class="note">
+    <span class="label">Why this distinction matters</span>
+    &ldquo;Impact&rdquo; answers &ldquo;how badly does this hurt a user?&rdquo;. &ldquo;Conformance&rdquo;
+    answers &ldquo;does this page meet a specific WCAG success criterion?&rdquo;. They are related but not
+    identical. This tool reports the first and never claims the second.
+  </div>
+
+  <h3>4.2 What a good result actually looks like</h3>
+  <p>
+    A page with no automated violations is a good sign, not a certificate. A responsible workflow is:
+    fix what the tool finds, then test with a keyboard, then test with a screen reader, then ask a
+    real user to try a task. This project automates the first step well and says so clearly.
+  </p>
+</div>
+
+<!-- ============ 5 ============ -->
+<div class="section">
+  <h2>5. How the Scanner Works</h2>
+
+  <h3>5.1 Why a real browser is needed</h3>
+  <p>
+    Many accessibility problems only exist after the browser has built the page. A modern site may
+    render its menu with JavaScript, load fonts late, or set colours in a stylesheet. A simple HTML
+    download would miss all of that. Playwright drives an actual Chrome or Edge browser, so the
+    tool checks the page in the same state a user sees.
+  </p>
+
+  <h3>5.2 What axe-core is</h3>
+  <p>
+    axe-core is an open-source accessibility testing engine made by Deque Systems, licensed under the
+    Mozilla Public License 2.0. It is the same engine used behind Lighthouse&rsquo;s accessibility
+    audit and by many commercial testing tools. It contains dozens of rules covering images, forms,
+    colour contrast, ARIA, document structure, tables and best practices.
+  </p>
+  <p>
+    Version <b>4.14.0</b> is stored inside the project at
+    <code>a11y_auditor/vendor/axe.min.js</code> (about 637 KB). Keeping a local copy means a scan
+    never fails because a content delivery network is down or blocked, and the exact rule set is
+    reproducible.
+  </p>
+
+  <h3>5.3 The scan, step by step</h3>
+  <div class="flow">
+    <div class="box"><b>1. Start a browser</b><br><span class="t">Playwright launches installed Chrome, Edge, or bundled Chromium in headless mode</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>2. Open the URL</b><br><span class="t">Desktop viewport 1366 &times; 900 &middot; configurable timeout &middot; waits for the load event</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>3. Let the page settle</b><br><span class="t">Extra wait (1.2 s by default) for late JavaScript, fonts and lazy content</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>4. Check for a bot wall</b><br><span class="t">If the title is a CAPTCHA or &ldquo;Just a moment&rdquo; page, stop and explain instead of scoring it</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>5. Inject axe-core</b><br><span class="t">Add a script tag; if a strict CSP blocks it, evaluate the source directly as a fallback</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>6. Run the rules</b><br><span class="t">axe.run(document) returns violations, passes and incomplete checks</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>7. Reduce the result</b><br><span class="t">Keep only the fields needed: rule id, impact, help text, tags and affected elements</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>8. Score and report</b><br><span class="t">Calculate the score, render Markdown / HTML / JSON, close the browser</span></div>
+  </div>
+
+  <h3>5.4 Robustness decisions</h3>
+  <table>
+    <tr><th style="width:34%">Decision</th><th>Reason</th></tr>
+    <tr><td>Try the requested browser, then fall back</td><td>If Chrome is not installed, the tool still works with Playwright&rsquo;s own Chromium, with a clear error if neither exists.</td></tr>
+    <tr><td>Script-tag injection with an eval fallback</td><td>Some sites use a Content Security Policy that blocks added script files.</td></tr>
+    <tr><td>Refuse to score bot-protection pages</td><td>A CAPTCHA page is not the site. Scoring it would produce a false result.</td></tr>
+    <tr><td>Cap stored elements per rule</td><td>A page with 200 broken images should not send a giant result across the browser boundary or flood the report.</td></tr>
+    <tr><td>Close the browser in a <code>finally</code> block</td><td>Processes are cleaned up even when a scan fails.</td></tr>
+  </table>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    The tool does not guess from the HTML source. It opens the page in a real browser, lets it finish
+    loading, then runs a professional accessibility checklist inside the page.
+  </div>
+</div>
+
+<!-- ============ 6 ============ -->
+<div class="section">
+  <h2>6. The Checks It Runs</h2>
+
+  <p>
+    The tool runs every rule that axe-core enables by default, including WCAG 2.0, 2.1 and 2.2 rules
+    and best-practice rules. The table below groups the most important ones by what a user experiences.
+  </p>
+
+  <table>
+    <tr><th style="width:22%">Area</th><th style="width:34%">Example rule</th><th>What it catches</th></tr>
+    <tr><td>Images</td><td><code>image-alt</code></td><td>An informative image with no <code>alt</code> text, or a decorative image that is not marked as decorative.</td></tr>
+    <tr><td>Colour</td><td><code>color-contrast</code></td><td>Text whose contrast ratio against its background is too low for normal reading.</td></tr>
+    <tr><td>Forms</td><td><code>label</code></td><td>An input with no programmatic label, so a screen reader cannot announce its purpose.</td></tr>
+    <tr><td>Control names</td><td><code>button-name</code>, <code>link-name</code></td><td>A button or link with no readable text or accessible name.</td></tr>
+    <tr><td>Structure</td><td><code>heading-order</code>, <code>region</code></td><td>Headings that skip levels; page content that sits outside any landmark region.</td></tr>
+    <tr><td>ARIA</td><td><code>aria-required-parent</code></td><td>An ARIA role used in a place where it cannot work, such as a tree item outside a tree.</td></tr>
+    <tr><td>Keyboard</td><td><code>scrollable-region-focusable</code></td><td>A scrollable area that cannot be reached or scrolled with the keyboard.</td></tr>
+    <tr><td>Document basics</td><td><code>html-has-lang</code>, <code>frame-title</code></td><td>A page with no declared language; an iframe with no title.</td></tr>
+    <tr><td>Tables</td><td><code>td-headers-attr</code></td><td>Data tables whose header cells are not connected to the data cells correctly.</td></tr>
+    <tr><td>Zoom and viewport</td><td><code>meta-viewport</code></td><td>A page that disables pinch zoom or sets a maximum scale.</td></tr>
+  </table>
+
+  <h3>6.1 What the tool reports for each failure</h3>
+  <ul>
+    <li><b>Rule id and title</b> &mdash; for example <code>image-alt</code>, &ldquo;Images must have alternative text&rdquo;.</li>
+    <li><b>Impact</b> &mdash; critical, serious, moderate or minor.</li>
+    <li><b>Description and documentation link</b> &mdash; so the developer can read the full rule.</li>
+    <li><b>WCAG tags</b> &mdash; which success criteria the rule maps to, when applicable.</li>
+    <li><b>Affected elements</b> &mdash; a CSS selector and a short HTML snippet for each one.</li>
+    <li><b>Failure summary</b> &mdash; axe-core&rsquo;s short explanation of what to change.</li>
+  </ul>
+
+  <h3>6.2 What it does not report</h3>
+  <p>
+    A rule that passes is counted but not listed in detail. Rules marked &ldquo;incomplete&rdquo; by
+    axe-core are counted separately, because the engine could not decide automatically. The report
+    shows that count so the user knows a human should look.
+  </p>
+
+  <div class="warn">
+    <span class="label">Important</span>
+    Automated rules check what can be expressed as a machine rule. They cannot tell whether an alt
+    text is <i>useful</i>, whether the tab order is <i>logical</i>, or whether an error message is
+    <i>understandable</i>. Those need a person.
+  </div>
+</div>
+
+<!-- ============ 7 ============ -->
+<div class="section">
+  <h2>7. The 0&ndash;100 Score</h2>
+
+  <p>
+    The score is a summary, not a measurement of WCAG compliance. It exists so a team can see
+    progress and compare pages. The formula is deliberately simple enough to explain to a
+    non-technical person.
+  </p>
+
+  <h3>7.1 Step one: what each failed rule costs</h3>
+  <table>
+    <tr><th style="width:22%">Impact</th><th style="width:26%">Points per rule</th><th>Most it can cost in total</th></tr>
+    <tr><td>Critical</td><td>10</td><td>50</td></tr>
+    <tr><td>Serious</td><td>6</td><td>30</td></tr>
+    <tr><td>Moderate</td><td>3</td><td>15</td></tr>
+    <tr><td>Minor</td><td>1</td><td>5</td></tr>
+  </table>
+
+  <h3>7.2 Step two: count affected elements, but stop at three</h3>
+  <p>
+    Each rule&rsquo;s cost is multiplied by the number of affected elements, but never by more than
+    three. A page with 200 images missing alt text therefore costs the same as a page with three.
+    Without this limit, one repeated mistake would hide every other problem on the page.
+  </p>
+
+  <h3>7.3 Step three: cap each severity</h3>
+  <p>
+    Even a page with 30 critical rules should not automatically score zero, because zero hides
+    everything the page gets right. Each severity can only take away the maximum shown in the table
+    above. The four caps add up to 100, so a score of 0 is still possible when every category is
+    saturated.
+  </p>
+
+  <h3>7.4 Step four: subtract and grade</h3>
+  <p>
+    <code>score = max(0, 100 &minus; total deduction)</code>. The letter grade follows:
+  </p>
+  <table>
+    <tr><th style="width:22%">Grade</th><th style="width:22%">Score</th><th>Meaning used by the tool</th></tr>
+    <tr><td><b>A</b></td><td>90&ndash;100</td><td>Good &mdash; only minor problems found.</td></tr>
+    <tr><td><b>B</b></td><td>80&ndash;89</td><td>Fair &mdash; several issues should be fixed.</td></tr>
+    <tr><td><b>C</b></td><td>70&ndash;79</td><td>Needs work &mdash; real barriers for some users.</td></tr>
+    <tr><td><b>D</b></td><td>60&ndash;69</td><td>Poor &mdash; many users will struggle.</td></tr>
+    <tr><td><b>F</b></td><td>0&ndash;59</td><td>Failing &mdash; serious barriers across the page.</td></tr>
+  </table>
+
+  <h3>7.5 A complete worked example</h3>
+  <p>
+    The demo page in <code>examples/bad-page.html</code> fails nine rules. Here is the exact
+    calculation, using the real scan output:
+  </p>
+  <table>
+    <tr><th style="width:30%">Rule</th><th style="width:14%">Impact</th><th style="width:14%">Elements</th><th style="width:14%">Counted</th><th>Points</th></tr>
+    <tr><td><code>button-name</code></td><td>Critical</td><td>1</td><td>1</td><td>10</td></tr>
+    <tr><td><code>image-alt</code></td><td>Critical</td><td>1</td><td>1</td><td>10</td></tr>
+    <tr><td><code>color-contrast</code></td><td>Serious</td><td>1</td><td>1</td><td>6</td></tr>
+    <tr><td><code>html-has-lang</code></td><td>Serious</td><td>1</td><td>1</td><td>6</td></tr>
+    <tr><td><code>link-name</code></td><td>Serious</td><td>1</td><td>1</td><td>6</td></tr>
+    <tr><td><code>heading-order</code></td><td>Moderate</td><td>1</td><td>1</td><td>3</td></tr>
+    <tr><td><code>landmark-one-main</code></td><td>Moderate</td><td>1</td><td>1</td><td>3</td></tr>
+    <tr><td><code>meta-viewport</code></td><td>Moderate</td><td>1</td><td>1</td><td>3</td></tr>
+    <tr><td><code>region</code></td><td>Moderate</td><td>10</td><td>3</td><td>9</td></tr>
+  </table>
+
+  <div class="scorebox">
+    <span class="lbl">Severity totals before caps</span>
+    <p style="margin:4pt 0 8pt 0">
+      Critical 20 &middot; Serious 18 &middot; Moderate 18 &middot; Minor 0
+    </p>
+    <span class="lbl">After caps</span>
+    <p style="margin:4pt 0 8pt 0">
+      Critical 20 (cap 50) &middot; Serious 18 (cap 30) &middot; Moderate 15 (cap 15) &middot; Minor 0
+    </p>
+    <span class="big">47</span> <span class="lbl">out of 100 &mdash; grade F</span>
+    <p class="small" style="margin:6pt 0 0 0">
+      100 &minus; (20 + 18 + 15 + 0) = 47
+    </p>
+  </div>
+
+  <h3>7.6 Why the caps exist</h3>
+  <p>
+    The first version of the score had no severity caps. When tested against <code>python.org</code>,
+    it returned <b>0/100</b> from seven failed rules. That number was technically consistent but
+    useless: it told the reader nothing about which problems were worse, and it made any improvement
+    invisible. The caps were added after that test, and the same page then scored <b>17/100</b>.
+    Still poor, but informative.
+  </p>
+  <p>
+    The caps are a product judgement, not an accessibility standard. The report and README both say
+    so. The grade is a progress indicator, not a compliance verdict.
+  </p>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    Start at 100. Take away points for each kind of mistake, with worse mistakes costing more. Stop
+    counting repeats after three examples of the same mistake, and stop one category from wiping out
+    the whole score. Then turn the number into a letter.
+  </div>
+</div>
+
+<!-- ============ 8 ============ -->
+<div class="section">
+  <h2>8. The Reports</h2>
+
+  <p>
+    A scan produces up to three files, all from the same result object. They contain the same facts,
+    formatted for different readers.
+  </p>
+
+  <table>
+    <tr><th style="width:16%">Format</th><th style="width:30%">Best for</th><th>What it contains</th></tr>
+    <tr><td><b>Markdown</b></td><td>GitHub issues, pull requests, README notes</td><td>Summary, severity table, one section per violation, element selectors and HTML snippets.</td></tr>
+    <tr><td><b>HTML</b></td><td>Sharing with a client or printing to PDF</td><td>A self-contained page with styling, score cards, severity table and every violation. No internet needed.</td></tr>
+    <tr><td><b>JSON</b></td><td>Other tools, dashboards, automation</td><td>Structured data: URL, title, timestamp, score, grade, counts, and a full array of violations and elements.</td></tr>
+  </table>
+
+  <h3>8.1 What every report includes</h3>
+  <ul>
+    <li>The page URL and title, plus the scan date and duration.</li>
+    <li>The score, grade and a one-line verdict.</li>
+    <li>Counts of failed rules, affected elements, passed rules and checks needing review.</li>
+    <li>A severity breakdown: critical, serious, moderate, minor.</li>
+    <li>Every violation sorted from worst to least severe, then by number of affected elements.</li>
+    <li>For each violation: the rule, its impact, a description, a documentation link, WCAG tags, and each affected element.</li>
+    <li>The honest footer: automated checks catch only part of the problem.</li>
+  </ul>
+
+  <h3>8.2 Printable HTML instead of a separate PDF library</h3>
+  <p>
+    The HTML report is designed to print cleanly on A4. Instead of adding a heavy PDF dependency, the
+    project tells the user to open the HTML file and choose <b>Print &rarr; Save as PDF</b>. That keeps
+    the dependency list small and the output predictable. The repository includes a real sample at
+    <code>docs/sample-report.html</code>.
+  </p>
+
+  <div class="note">
+    <span class="label">Design choice</span>
+    The reports never say &ldquo;this page is WCAG compliant&rdquo;. They say what was checked, what
+    failed, and what a human should still verify. That restraint is deliberate.
+  </div>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    One scan gives you a GitHub-friendly text report, a polished page you can print or send, and a
+    data file that other software can read.
+  </div>
+</div>
+
+<!-- ============ 9 ============ -->
+<div class="section">
+  <h2>9. Real Scans and What They Show</h2>
+
+  <p>
+    These are real results from the finished tool. They are included because a portfolio project
+    should show evidence, not only claims.
+  </p>
+
+  <table>
+    <tr><th style="width:30%">Page</th><th style="width:10%">Score</th><th style="width:10%">Grade</th><th style="width:16%">Rules failed</th><th>What was found</th></tr>
+    <tr>
+      <td><code>examples/bad-page.html</code> (deliberately broken)</td>
+      <td>47</td><td>F</td><td>9 (18 elements)</td>
+      <td>Missing button name, missing alt text, low contrast, no page language, empty link, heading jump, missing landmarks, zoom disabled, content outside landmarks.</td>
+    </tr>
+    <tr>
+      <td><code>example.com</code></td>
+      <td>85</td><td>B</td><td>3 (9 elements)</td>
+      <td>Only best-practice structure issues: content not wrapped in landmarks. No critical or serious failures.</td>
+    </tr>
+    <tr>
+      <td><code>python.org</code></td>
+      <td>17</td><td>F</td><td>7 (43 elements)</td>
+      <td>Two critical and four serious rules, including ARIA tree items outside a tree, plus contrast and hidden-navigation issues.</td>
+    </tr>
+  </table>
+
+  <h3>9.1 Reading the results honestly</h3>
+  <p>
+    A low score does not mean a site is unusable. The python.org result is driven by its hidden
+    navigation: items carry the ARIA role <code>treeitem</code> without a surrounding tree, and the
+    same kind of issue repeats many times. That is a genuine bug worth fixing, but most sighted
+    visitors never notice it. The report lists the exact elements so a developer can judge.
+  </p>
+  <p>
+    Equally, a high score is not proof of quality. <code>example.com</code> is a deliberately tiny
+    page. It cannot demonstrate good form design, keyboard flow or screen reader behaviour because
+    it has none of those things.
+  </p>
+
+  <h3>9.2 A scan that refused to produce a result</h3>
+  <p>
+    The W3C&rsquo;s intentionally bad demo page was an obvious test target. When scanned, it returned a
+    Cloudflare page titled &ldquo;Just a moment&hellip;&rdquo; instead of the real content. The first
+    version of the tool happily reported &ldquo;1 critical issue, score 90&rdquo; against the CAPTCHA
+    screen. That was a false result.
+  </p>
+  <p>
+    The fix was a guard: if the page title matches a known bot-protection screen, the scan stops with a
+    clear message and exit code 2. It is a small feature, but it shows the difference between producing
+    a number and producing a trustworthy number.
+  </p>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    The tool was tested on a broken demo page, a tiny clean page and a large real website. It also
+    learned to refuse when a website blocks robots, instead of inventing a score.
+  </div>
+</div>
+
+<!-- ============ 10 ============ -->
+<div class="section">
+  <h2>10. Inside the Project Folder</h2>
+
+  <p>
+    The code is split by responsibility. Each file has one job, which keeps the scanner, the scoring
+    logic, the reports and the interfaces independent of each other.
+  </p>
+
+  <table>
+    <tr><th style="width:34%">File</th><th>What it does</th></tr>
+    <tr><td><code>a11y_auditor/models.py</code></td><td>Defines the three data structures: one affected element, one failed rule, one complete result.</td></tr>
+    <tr><td><code>a11y_auditor/auditor.py</code></td><td>Starts the browser, loads the page, injects axe-core, runs the rules and returns an <code>AuditResult</code>.</td></tr>
+    <tr><td><code>a11y_auditor/scoring.py</code></td><td>Converts violations into a score, grade and short verdict using the documented formula.</td></tr>
+    <tr><td><code>a11y_auditor/report.py</code></td><td>Renders the same result as Markdown, standalone HTML or JSON.</td></tr>
+    <tr><td><code>a11y_auditor/cli.py</code></td><td>The command-line interface, file naming, format validation and the <code>--fail-under</code> exit code.</td></tr>
+    <tr><td><code>a11y_auditor/vendor/axe.min.js</code></td><td>The vendored axe-core 4.14.0 engine, licensed MPL-2.0.</td></tr>
+    <tr><td><code>app.py</code></td><td>The Streamlit web interface: URL input, scan button, metrics, filters, expandable issues and download buttons.</td></tr>
+    <tr><td><code>tests/test_scoring.py</code></td><td>Tests the weights, both caps, grade bands, impact counting and verdicts.</td></tr>
+    <tr><td><code>tests/test_report.py</code></td><td>Tests JSON shape, sorting, Markdown content, HTML escaping and standalone structure.</td></tr>
+    <tr><td><code>tests/test_cli.py</code></td><td>Tests report file names, the dot-in-host regression, and validation before a scan.</td></tr>
+    <tr><td><code>tests/conftest.py</code></td><td>Makes the project importable when pytest runs from any directory.</td></tr>
+    <tr><td><code>examples/bad-page.html</code></td><td>A small page with deliberate mistakes, used for demos and manual checks.</td></tr>
+    <tr><td><code>docs/sample-report.html</code></td><td>A real report generated from the demo page, committed as evidence.</td></tr>
+    <tr><td><code>pyproject.toml</code></td><td>Package metadata, dependencies and the <code>a11y-auditor</code> console command.</td></tr>
+    <tr><td><code>requirements.txt</code></td><td>The short list of runtime and test packages.</td></tr>
+    <tr><td><code>pytest.ini</code></td><td>Tells pytest where the tests live.</td></tr>
+    <tr><td><code>.github/workflows/ci.yml</code></td><td>GitHub Actions workflow: install dependencies and run the tests on every push and pull request.</td></tr>
+    <tr><td><code>README.md</code></td><td>What the project does, how to install it, how to use it, the scoring model, credits and honest limits.</td></tr>
+    <tr><td><code>LICENSE</code></td><td>MIT for the project code, with a clear note that axe-core keeps its own MPL-2.0 licence.</td></tr>
+    <tr><td><code>.gitignore</code></td><td>Keeps the virtual environment, caches and generated reports out of Git.</td></tr>
+  </table>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    One file opens the page, one file calculates the score, one file writes the report, one file is
+    the command line, one file is the web page. The tests check the maths and the reports without
+    needing the internet.
+  </div>
+</div>
+
+<!-- ============ 11 ============ -->
+<div class="section">
+  <h2>11. How to Run It</h2>
+
+  <h3>11.1 What you need first</h3>
+  <ul>
+    <li>Python 3.10 or newer.</li>
+    <li>Google Chrome or Microsoft Edge installed, or Playwright&rsquo;s own Chromium.</li>
+    <li>Internet access for the page you want to scan (the tool itself runs locally).</li>
+  </ul>
+
+  <h3>11.2 Setup</h3>
+  <ol>
+    <li>Open a terminal in the project folder.</li>
+    <li>Create a virtual environment: <code>python -m venv venv</code></li>
+    <li>Activate it: <code>venv\Scripts\activate</code> on Windows, or <code>source venv/bin/activate</code> on macOS / Linux.</li>
+    <li>Install the packages: <code>pip install -r requirements.txt</code></li>
+    <li>Optional: install the package itself with <code>pip install -e .</code> to get the short <code>a11y-auditor</code> command.</li>
+  </ol>
+  <p class="small">
+    If Chrome and Edge are missing, run <code>playwright install chromium</code> and pass
+    <code>--browser ""</code> to use the bundled browser.
+  </p>
+
+  <h3>11.3 Scan from the command line</h3>
+  <p>Basic use:</p>
+  <pre style="background:#f7f9fc;border:1px solid #e6ebf2;border-radius:5pt;padding:8pt 10pt;font-size:9pt;white-space:pre-wrap">python -m a11y_auditor.cli https://example.com</pre>
+  <p>Useful options:</p>
+  <table>
+    <tr><th style="width:34%">Option</th><th>What it does</th></tr>
+    <tr><td><code>--out DIR</code></td><td>Where to write the reports. Default: <code>reports</code>.</td></tr>
+    <tr><td><code>--format md,html,json</code></td><td>Choose any combination of formats.</td></tr>
+    <tr><td><code>--browser chrome</code></td><td>Choose <code>chrome</code>, <code>msedge</code>, or an empty string for bundled Chromium.</td></tr>
+    <tr><td><code>--timeout 30000</code></td><td>Page load timeout in milliseconds.</td></tr>
+    <tr><td><code>--wait 1200</code></td><td>Extra settle time after load, for late JavaScript.</td></tr>
+    <tr><td><code>--fail-under 90</code></td><td>Exit with code 1 if the score is below 90. Useful in CI.</td></tr>
+    <tr><td><code>--quiet</code></td><td>Print only the summary, not every violation.</td></tr>
+  </table>
+
+  <h3>11.4 Scan from the web app</h3>
+  <pre style="background:#f7f9fc;border:1px solid #e6ebf2;border-radius:5pt;padding:8pt 10pt;font-size:9pt;white-space:pre-wrap">streamlit run app.py</pre>
+  <p>
+    The app opens at <code>http://localhost:8501</code>. Enter a URL, press <b>Scan page</b>, then
+    filter by severity and download any report format.
+  </p>
+
+  <h3>11.5 What a run looks like</h3>
+  <pre style="background:#f7f9fc;border:1px solid #e6ebf2;border-radius:5pt;padding:8pt 10pt;font-size:8.6pt;white-space:pre-wrap">Bed &amp; Breakfast - demo page with accessibility problems
+  score 47/100 (grade F)
+  9 rules failed, 18 elements affected
+  critical 2 | serious 3 | moderate 4 | minor 0
+
+  1. [critical] button-name - Buttons must have discernible text (1 element(s))
+       button
+  2. [serious] color-contrast - Elements must meet minimum color contrast ratio thresholds (1 element(s))
+       .faint
+  ...
+
+Reports written:
+  reports/bad-page.md
+  reports/bad-page.html
+  reports/bad-page.json</pre>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    Install once, activate the environment, then either run one command or open the web page. The
+    result is a readable report in a folder, plus a summary in the terminal.
+  </div>
+</div>
+
+<!-- ============ 12 ============ -->
+<div class="section">
+  <h2>12. Engineering Quality: Tests and CI</h2>
+
+  <p>
+    A working demo is not the same as a maintained project. Two things separate this project from a
+    script that happens to run: the tests and the continuous integration pipeline.
+  </p>
+
+  <h3>12.1 The 29 tests</h3>
+  <table>
+    <tr><th style="width:24%">Test file</th><th style="width:12%">Tests</th><th>What is verified</th></tr>
+    <tr><td><code>test_scoring.py</code></td><td>12</td><td>Perfect page scores 100; each impact costs the right points; the three-element cap works; severity caps work; all categories saturated reaches 0; unknown impact falls back safely; grade boundaries; counts use rules not elements; every impact key always exists.</td></tr>
+    <tr><td><code>test_report.py</code></td><td>9</td><td>JSON has the expected fields and correct counts; violations are sorted worst-first; a clean page scores 100; JSON round-trips; Markdown contains the key sections; empty results are worded correctly; HTML escapes page content; HTML is a standalone document.</td></tr>
+    <tr><td><code>test_cli.py</code></td><td>8</td><td>File names keep dots in host names; schemes and trailing slashes are handled; file URLs use the file name; report paths are correct; long URLs are shortened; empty slugs fall back; bad formats are rejected before any scan.</td></tr>
+  </table>
+
+  <p>
+    The tests use synthetic data only. They need no network, no browser and no axe-core run, so the
+    suite finishes in under a second and can run anywhere. That is a deliberate trade-off: the logic is
+    tested thoroughly, while the browser scan is verified manually against real pages.
+  </p>
+
+  <h3>12.2 Continuous integration</h3>
+  <p>
+    The GitHub Actions workflow runs on every push to <code>main</code> and on every pull request. It
+    installs Python 3.11, installs the dependencies, and runs <code>pytest</code>. A green badge on the
+    README is a live signal that the tests still pass, not a screenshot pasted into the document.
+  </p>
+
+  <h3>12.3 Two real bugs the testing caught</h3>
+  <table>
+    <tr><th style="width:26%">Bug</th><th>What happened</th><th>Fix</th></tr>
+    <tr>
+      <td>Report names were truncated</td>
+      <td><code>Path.with_suffix(".md")</code> treated the dot inside <code>www.w3.org</code> as a file suffix, producing <code>www.w3.md</code>.</td>
+      <td>Build the filename by hand and add a regression test for the exact case.</td>
+    </tr>
+    <tr>
+      <td>Tests passed locally, failed on CI</td>
+      <td><code>conftest.py</code> added the <code>tests</code> folder instead of the project root. Locally, <code>python -m pytest</code> hid the mistake by adding the working directory. On CI, imports failed.</td>
+      <td>Point the path at the project root, then repeat the test with the plain <code>pytest</code> command that CI uses.</td>
+    </tr>
+  </table>
+
+  <div class="warn">
+    <span class="label">Honest gap</span>
+    There is no end-to-end test that launches a browser and scans a page in CI yet. The browser
+    scan is checked manually. Adding a local fixture page to GitHub Actions is the next testing step.
+  </div>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    The maths and the reports are checked automatically every time the code changes. The browser part
+    is checked by hand. The tests already caught two real mistakes, including one that only appeared
+    on a different computer.
+  </div>
+</div>
+
+<!-- ============ 13 ============ -->
+<div class="section">
+  <h2>13. Strengths of the Project</h2>
+
+  <table>
+    <tr><th style="width:36%">Strength</th><th>Why it matters</th></tr>
+    <tr><td>Uses a professional engine</td><td>axe-core is the same engine behind Lighthouse, not a homemade approximation of accessibility rules.</td></tr>
+    <tr><td>Checks the rendered page</td><td>Real browser rendering means JavaScript content and computed colours are included.</td></tr>
+    <tr><td>Two usable interfaces</td><td>The command line suits automation; the web app suits a person who wants to look around.</td></tr>
+    <tr><td>Actionable output</td><td>Every issue points to the exact element, not just a rule name.</td></tr>
+    <tr><td>Three export formats</td><td>The same result fits a GitHub issue, a client document or another program.</td></tr>
+    <tr><td>Documented scoring</td><td>The weights, caps and grades are written down and covered by tests, so the number is reproducible.</td></tr>
+    <tr><td>Automated tests and CI</td><td>Shows engineering discipline, not only a working demo.</td></tr>
+    <tr><td>Honest limits</td><td>The README and reports state what automation cannot catch and avoid compliance claims.</td></tr>
+    <tr><td>Handles real-world friction</td><td>Browser fallback, CSP fallback, bot-protection guard and timeouts are dealt with explicitly.</td></tr>
+    <tr><td>Packaging</td><td>A <code>pyproject.toml</code> and console entry point make it installable, not just a folder of scripts.</td></tr>
+    <tr><td>Licence hygiene</td><td>The project is MIT, and the bundled axe-core keeps its MPL-2.0 notice.</td></tr>
+    <tr><td>Calibrated after evidence</td><td>The scoring caps were changed because a real test produced a useless zero, and the change is documented.</td></tr>
+  </table>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    It is not just &ldquo;a script that scans a website&rdquo;. It is packaged, tested, documented,
+    honest about its limits, and built on a trusted engine.
+  </div>
+</div>
+
+<!-- ============ 14 ============ -->
+<div class="section">
+  <h2>14. Limitations (Honest List)</h2>
+
+  <p>
+    Every tool has limits. Writing them down is part of building trust. These are the real limits of
+    this version, not hypothetical ones.
+  </p>
+
+  <table>
+    <tr><th style="width:34%">Limitation</th><th>What it means in practice</th></tr>
+    <tr><td>Automation finds only part of the problem</td><td>Common estimates say automated checks catch roughly 30&ndash;50% of real accessibility issues. The rest needs human judgement.</td></tr>
+    <tr><td>Only the loaded state is checked</td><td>Content behind a login, a click, a menu, a modal or infinite scroll is not reached.</td></tr>
+    <tr><td>No keyboard or screen reader testing</td><td>The tool cannot judge tab order, focus traps, announcements or reading flow. Those still need a person.</td></tr>
+    <tr><td>The score is a heuristic</td><td>The weights and caps are product decisions, not a WCAG formula. A high score is not a compliance certificate.</td></tr>
+    <tr><td>One page per scan</td><td>No crawling, no sitemap, no site-wide summary. Each URL is a separate scan.</td></tr>
+    <tr><td>Content inside iframes is missed</td><td>axe-core runs on the main document. Frames would need separate injection and are not covered yet.</td></tr>
+    <tr><td>No screenshots</td><td>Issues are described with selectors and HTML snippets, not pictures of the problem.</td></tr>
+    <tr><td>No login or session support</td><td>Private pages behind authentication cannot be scanned.</td></tr>
+    <tr><td>Some sites block automation</td><td>Bot protection produces a refusal to score. That is safer than a false result, but it means the site cannot be checked.</td></tr>
+    <tr><td>Timing can change the result</td><td>JavaScript-heavy pages may still be loading. The extra wait is configurable, but it is not a guarantee.</td></tr>
+    <tr><td>Rule set is pinned</td><td>axe-core 4.14.0 is fixed in the repository. New rules and fixes arrive only when the vendored file is updated.</td></tr>
+    <tr><td>No browser test in CI</td><td>The scan path is verified manually; the automated suite covers scoring, reports and file naming.</td></tr>
+    <tr><td>Not deployed</td><td>Both interfaces run locally. There is no hosted demo or public API.</td></tr>
+    <tr><td>No PDF writer</td><td>PDF is produced by printing the HTML report, not by a dedicated PDF library.</td></tr>
+    <tr><td>No legal or compliance claim</td><td>The tool cannot certify WCAG conformance and does not try to.</td></tr>
+  </table>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    It is a strong first filter, not an accessibility expert. It catches the mechanical mistakes
+    quickly and tells you where they are. A person still has to use the page with a keyboard and a
+    screen reader to find the rest.
+  </div>
+</div>
+
+<!-- ============ 15 ============ -->
+<div class="section">
+  <h2>15. Future Improvements</h2>
+
+  <h3>15.1 Highest impact first</h3>
+  <ol>
+    <li><b>End-to-end test with a local page.</b> Add a fixture page to the repository, install Chromium in CI, and assert the exact violations and score. This closes the largest testing gap.</li>
+    <li><b>Crawl mode.</b> Accept a start URL, follow internal links up to a depth and page limit, and produce a site-wide summary.</li>
+    <li><b>Screenshots per issue.</b> Use Playwright to capture the affected element and embed the image in the HTML report. A picture is faster to understand than a selector.</li>
+    <li><b>Baseline comparison.</b> Save a scan, then compare the next one and show what was fixed, what is new and what remains.</li>
+  </ol>
+
+  <h3>15.2 Next</h3>
+  <ol start="5">
+    <li><b>SARIF export.</b> A format GitHub code scanning understands, so issues appear in the security tab automatically.</li>
+    <li><b>Ready-made GitHub Action.</b> Let other repositories run the auditor with a few lines of YAML.</li>
+    <li><b>Interactive states.</b> Allow a small script of clicks before the scan, so open menus and dialogs are checked too.</li>
+    <li><b>Iframe support.</b> Inject axe-core into each frame and merge the results.</li>
+    <li><b>WCAG level filter.</b> Choose A, AA or AAA rules only, for teams targeting a specific standard.</li>
+    <li><b>Hosted demo.</b> Deploy the Streamlit app with a container, plus a queue and timeout so public use is safe.</li>
+    <li><b>Localised reports.</b> Add Tamil and Hindi report text for local government and college websites.</li>
+  </ol>
+
+  <div class="simple">
+    <span class="label">In simple words</span>
+    First make the testing complete. Then check a whole website instead of one page, show pictures of
+    the problems, and make it easy to see whether a fix actually improved the score.
+  </div>
+</div>
+
+<!-- ============ 16 ============ -->
+<div class="section">
+  <h2>16. Glossary in Simple English</h2>
+
+  <table>
+    <tr><th style="width:27%">Term</th><th>Simple meaning</th></tr>
+    <tr><td>Accessibility</td><td>Building something so that people with disabilities can use it too.</td></tr>
+    <tr><td>WCAG</td><td>Web Content Accessibility Guidelines &mdash; the international rulebook for accessible websites.</td></tr>
+    <tr><td>WCAG 2.2</td><td>The current version of that rulebook, published by the W3C in 2023.</td></tr>
+    <tr><td>POUR</td><td>Four principles: Perceivable, Operable, Understandable, Robust.</td></tr>
+    <tr><td>Conformance level</td><td>A, AA or AAA &mdash; how fully a page meets WCAG. AA is the usual legal target.</td></tr>
+    <tr><td>Impact level</td><td>The tool&rsquo;s urgency label for a failed rule: critical, serious, moderate or minor.</td></tr>
+    <tr><td>axe-core</td><td>An open-source accessibility testing engine made by Deque Systems.</td></tr>
+    <tr><td>Rule</td><td>One specific accessibility check, such as &ldquo;every image needs alt text&rdquo;.</td></tr>
+    <tr><td>Violation</td><td>A rule that the page failed.</td></tr>
+    <tr><td>Element / node</td><td>One piece of the page, such as an image, a button or a paragraph.</td></tr>
+    <tr><td>CSS selector</td><td>A short pattern that identifies an element, such as <code>img.hero</code>.</td></tr>
+    <tr><td>Alt text</td><td>A written description of an image for people who cannot see it.</td></tr>
+    <tr><td>ARIA</td><td>Extra HTML attributes that tell assistive technology what a custom control is and does.</td></tr>
+    <tr><td>Contrast ratio</td><td>How different two colours are in brightness. Low contrast makes text hard to read.</td></tr>
+    <tr><td>Screen reader</td><td>Software that reads a page aloud for a blind or low-vision user.</td></tr>
+    <tr><td>Keyboard navigation</td><td>Using Tab, Enter, Space and arrow keys instead of a mouse.</td></tr>
+    <tr><td>Landmark</td><td>A labelled page region such as header, navigation, main or footer, used for quick navigation.</td></tr>
+    <tr><td>Heading order</td><td>The sequence of heading levels. It should not jump from level 1 to level 4.</td></tr>
+    <tr><td>DOM</td><td>The browser&rsquo;s live tree of elements after the page has been built.</td></tr>
+    <tr><td>Headless browser</td><td>A real browser running without a visible window, controlled by code.</td></tr>
+    <tr><td>Playwright</td><td>The Python library that drives Chrome, Edge or Chromium from code.</td></tr>
+    <tr><td>CSP</td><td>Content Security Policy &mdash; a site setting that can block injected scripts.</td></tr>
+    <tr><td>Heuristic</td><td>A practical rule of thumb, not a guaranteed exact measurement.</td></tr>
+    <tr><td>CI (continuous integration)</td><td>A service that runs the tests automatically whenever code is pushed.</td></tr>
+    <tr><td>Regression test</td><td>A test written to stop an old bug from coming back.</td></tr>
+    <tr><td>Markdown</td><td>Plain text with simple formatting symbols, used on GitHub.</td></tr>
+    <tr><td>JSON</td><td>A structured text format that software can read easily.</td></tr>
+    <tr><td>SARIF</td><td>A standard file format for reporting code-analysis results to tools such as GitHub.</td></tr>
+    <tr><td>Virtual environment</td><td>A private folder of Python packages for one project, so projects do not interfere.</td></tr>
+  </table>
+</div>
+
+<!-- ============ 17 ============ -->
+<div class="section">
+  <h2>17. The Complete Algorithm &mdash; Explained for HR</h2>
+
+  <div class="stripe"></div>
+
+  <p class="small">
+    This final section is written for a non-technical reader. No prior knowledge is assumed.
+    Every step is one action. Nothing is skipped.
+  </p>
+
+  <h3>17.1 The one-minute explanation</h3>
+  <div class="note">
+    <p style="margin-bottom:6pt">
+      &ldquo;I built a tool that checks whether a website is usable by people with disabilities.
+      You give it a web address, and it opens the page in a real browser, the way a visitor would see
+      it. It then runs a professional accessibility checklist and finds problems such as images with
+      no description, text that is too faint to read, or buttons with no name. It groups the problems
+      by how serious they are, gives the page a score out of 100, and writes a report that shows the
+      exact element that needs fixing. It works from the command line and from a simple web page.
+      I also wrote tests and set up automatic testing on GitHub, and I documented clearly what the
+      tool cannot catch.&rdquo;
+    </p>
+  </div>
+
+  <h3>17.2 Algorithm A &mdash; How the system was built (from zero)</h3>
+  <table>
+    <tr><th style="width:8%">Step</th><th style="width:30%">Action</th><th>What it means</th></tr>
+    <tr><td>1</td><td>Understand the problem</td><td>Learn what makes a website hard to use for people with disabilities, and why manual checking does not scale.</td></tr>
+    <tr><td>2</td><td>Choose the scope</td><td>Check one page at a time, report what can be detected automatically, and do not pretend to replace human testing.</td></tr>
+    <tr><td>3</td><td>Choose an engine</td><td>Use axe-core, a trusted open-source accessibility engine, instead of inventing rules from scratch.</td></tr>
+    <tr><td>4</td><td>Make it reliable</td><td>Store axe-core inside the project so a scan does not depend on an external website.</td></tr>
+    <tr><td>5</td><td>Choose a browser driver</td><td>Use Playwright so the page is rendered by real Chrome, including JavaScript content.</td></tr>
+    <tr><td>6</td><td>Design the data</td><td>Define three simple objects: one affected element, one failed rule, one complete result.</td></tr>
+    <tr><td>7</td><td>Build the scanner</td><td>Open the page, wait for it to settle, inject axe-core, run the rules, and convert the result into those objects.</td></tr>
+    <tr><td>8</td><td>Handle real-world problems</td><td>Add a script fallback for strict security policies, a browser fallback, timeouts, and a guard against CAPTCHA pages.</td></tr>
+    <tr><td>9</td><td>Design the score</td><td>Give points per severity, count repeats up to three, cap each severity, subtract from 100, and map to a letter grade.</td></tr>
+    <tr><td>10</td><td>Build the reports</td><td>Write one result as Markdown, printable HTML and JSON from a single shared function.</td></tr>
+    <tr><td>11</td><td>Build the command line</td><td>Accept a URL, folder, formats, browser and timeout; validate the input; write the files; support a failure threshold.</td></tr>
+    <tr><td>12</td><td>Build the web app</td><td>Add a URL box, a scan button, score cards, a severity filter, expandable issue details and download buttons.</td></tr>
+    <tr><td>13</td><td>Write tests</td><td>Check the scoring maths, the report content, the HTML safety and the file naming, using synthetic data.</td></tr>
+    <tr><td>14</td><td>Add continuous integration</td><td>Run the tests automatically on every push and pull request, and show a green badge.</td></tr>
+    <tr><td>15</td><td>Test on real pages</td><td>Scan a deliberately broken demo page, a tiny clean page and a large real website; fix what the results reveal.</td></tr>
+    <tr><td>16</td><td>Document and publish</td><td>Write the README, licence, package metadata and honest limitations, then release the code on GitHub.</td></tr>
+  </table>
+
+  <h3>17.3 Algorithm B &mdash; What happens when a user scans a URL</h3>
+  <table>
+    <tr><th style="width:8%">Step</th><th style="width:30%">Action</th><th>What it means</th></tr>
+    <tr><td>1</td><td>User enters a URL</td><td>The command line or web app receives the address.</td></tr>
+    <tr><td>2</td><td>Check the input</td><td>The app rejects an empty address or one without <code>http://</code> or <code>https://</code>.</td></tr>
+    <tr><td>3</td><td>Start a browser</td><td>Playwright launches Chrome, Edge or bundled Chromium in the background.</td></tr>
+    <tr><td>4</td><td>Open the page</td><td>The browser loads the address and waits for the page load event, up to the timeout.</td></tr>
+    <tr><td>5</td><td>Wait a moment</td><td>Extra time lets late JavaScript, fonts and images finish appearing.</td></tr>
+    <tr><td>6</td><td>Check the title</td><td>If the page is a bot check or CAPTCHA, stop with a clear message rather than scoring it.</td></tr>
+    <tr><td>7</td><td>Load the checklist</td><td>Insert axe-core into the page; if the site blocks it, run the source directly as a fallback.</td></tr>
+    <tr><td>8</td><td>Run the rules</td><td>axe-core inspects the rendered document and returns every failed rule and affected element.</td></tr>
+    <tr><td>9</td><td>Reduce the result</td><td>Keep only the useful fields: rule, impact, explanation, tags and element details.</td></tr>
+    <tr><td>10</td><td>Calculate the score</td><td>Apply the weights, the three-element limit and the severity caps; produce the score and grade.</td></tr>
+    <tr><td>11</td><td>Build the reports</td><td>Render Markdown, HTML and JSON from the same result.</td></tr>
+    <tr><td>12</td><td>Show and save</td><td>The terminal prints a summary and file paths; the web app shows metrics and download buttons.</td></tr>
+    <tr><td>13</td><td>Close the browser</td><td>The browser is always closed, even if an error occurred.</td></tr>
+  </table>
+
+  <h3>17.4 Algorithm C &mdash; How the score is calculated (step by step)</h3>
+  <table>
+    <tr><th style="width:8%">Step</th><th style="width:30%">Action</th><th>What it means</th></tr>
+    <tr><td>1</td><td>Start with 100 points</td><td>The page is assumed perfect until a rule proves otherwise.</td></tr>
+    <tr><td>2</td><td>Take one failed rule</td><td>Look at its impact label: critical, serious, moderate or minor.</td></tr>
+    <tr><td>3</td><td>Find its weight</td><td>Critical is 10, serious is 6, moderate is 3, minor is 1.</td></tr>
+    <tr><td>4</td><td>Count affected elements</td><td>Count how many elements break that rule, but never count more than three.</td></tr>
+    <tr><td>5</td><td>Multiply</td><td>Weight &times; counted elements = points for that rule.</td></tr>
+    <tr><td>6</td><td>Add to its severity bucket</td><td>Keep a separate running total for critical, serious, moderate and minor.</td></tr>
+    <tr><td>7</td><td>Repeat for every rule</td><td>Every failed rule contributes to its own bucket.</td></tr>
+    <tr><td>8</td><td>Apply the severity caps</td><td>Critical can take at most 50, serious 30, moderate 15, minor 5.</td></tr>
+    <tr><td>9</td><td>Add the capped buckets</td><td>This is the total number of points removed.</td></tr>
+    <tr><td>10</td><td>Subtract from 100</td><td>Never go below zero. The result is the score.</td></tr>
+    <tr><td>11</td><td>Assign a grade</td><td>90+ is A, 80+ is B, 70+ is C, 60+ is D, below 60 is F.</td></tr>
+    <tr><td>12</td><td>Write a verdict</td><td>One plain sentence explains what the score means.</td></tr>
+  </table>
+
+  <h3>17.5 How to say it in an interview (five points)</h3>
+  <ol>
+    <li><b>The problem:</b> many websites lock out people with disabilities, and the people who build them usually cannot see the problem.</li>
+    <li><b>The approach:</b> use a trusted accessibility engine inside a real browser, then turn its output into a score and an actionable report.</li>
+    <li><b>The engineering:</b> separate scanning, scoring, reporting and interfaces; package it; test the maths and reports; run the tests automatically on GitHub.</li>
+    <li><b>The product:</b> give both a command line for automation and a web page for people, with severity filters and three export formats.</li>
+    <li><b>The honesty:</b> state that automation catches only part of the problem, document every limitation, and never claim WCAG certification.</li>
+  </ol>
+
+  <div class="simple">
+    <span class="label">If asked to explain it in one sentence</span>
+    &ldquo;It is a quality-check tool for websites: it opens a page like a real visitor, runs a
+    professional accessibility checklist, and tells you what is broken, how serious it is and where
+    to fix it &mdash; while being clear about what still needs a human.&rdquo;
+  </div>
+
+  <h3>17.6 Summary of the whole pipeline</h3>
+  <div class="flow">
+    <div class="box"><b>Input</b><br><span class="t">One public URL from the command line or web app</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>Render</b><br><span class="t">Real browser opens the page &middot; waits for JavaScript &middot; guards against bot walls</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>Check</b><br><span class="t">axe-core 4.14.0 runs dozens of accessibility rules on the rendered page</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>Score</b><br><span class="t">Weights 10 / 6 / 3 / 1 &middot; three-element limit &middot; severity caps &middot; letter grade</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>Report</b><br><span class="t">Markdown &middot; printable HTML &middot; JSON &middot; every issue with selector and snippet</span></div>
+    <div class="arrow">&#9660;</div>
+    <div class="box"><b>Ship</b><br><span class="t">29 tests &middot; GitHub Actions &middot; README with honest limits &middot; MIT licence</span></div>
+  </div>
+
+  <div class="cover-foot" style="margin-top:22pt">
+    Accessibility Auditor &mdash; Project Report &middot; Prepared by Anu &middot; November 2026<br>
+    Source: github.com/anusanu162-sudo/accessibility-auditor
+  </div>
+</div>
+
+</body>
+</html>
+
+
+
